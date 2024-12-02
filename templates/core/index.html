@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'CSS/style.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid search pb-5">
+    <div class="container justify-content-center pt-5">
+        <div class="row text-center">
+            <h1 class="mt-5 fs-1 fw-bolder text-light">Find Alumni Of Your University</h1>
+        </div>
+        <div class="container searchh mt-5 justify-content-center pb-5">
+            <form class="d-flex" role="search" action="{% url 'search_alumni' %}" method="GET">
+                {% csrf_token %}
+                <input class="form-control text-dark fs-5 fw-bolder w-75 inputbg" type="text"
+                    placeholder="Search by University | Department | Company | Job Title" aria-label="Search"
+                    id="randomKey" name="randomKey">
+                <button class="ms-1 btn btn-success btns" type="submit"> <i class="fa fa-search"></i></button>
+            </form>
+        </div><br><br>
+
+        <!-- Popular search -->
+        <!-- <p class="text-light ps-5 fs-4 fw-bolder">Popular Search</p>
+        <div class="d-lg-flex flex-row justify-content-evenly">
+            <div class="text-light p-lg-0 p-md-3 p-3">
+                <a href="#" class="btn btn-lg btn-outline-light rounded-pill btncolor ">Ui Ux Design <i
+                        class="fa-solid fa-magnifying-glass ms-3"></i></a>
+            </div>
+            <div class="text-light p-lg-0 p-md-3 p-3">
+                <a href="#" class="btn btn-lg btn-outline-light rounded-pill btncolor">Web Development <i
+                        class="fa-solid fa-magnifying-glass ms-3"></i></a>
+            </div>
+            <div class="text-light p-lg-0 p-md-3 p-3">
+                <a href="#" class="btn btn-lg btn-outline-light rounded-pill btncolor">App Development <i
+                        class="fa-solid fa-magnifying-glass ms-3"></i></a>
+            </div>
+            <div class="text-light p-lg-0 p-md-3 p-3">
+                <a href="#" class="btn btn-lg btn-outline-light rounded-pill btncolor">BUBT<i
+                        class="fa-solid fa-magnifying-glass ms-3"></i></a>
+            </div>
+            <div class="text-light p-lg-0 p-md-3 p-3">
+                <a href="#" class="btn btn-lg btn-outline-light rounded-pill btncolor">BUET <i
+                        class="fa-solid fa-magnifying-glass ms-3"></i></a>
+            </div>
+        </div><br><br><br> -->
+
+    </div>
+</div>
+<div class="container-fluid bg-light">
+    <div class="container mt-3">
+        <div class="d-lg-flex justify-content-around">
+            <div class="col-lg-6 col-md-12 col-12 text-center p-5">
+                <img src="{% static './images/Rectangle 11.png' %}" alt="" class="img-fluid w-lg-100 w-md-100 w-100">
+            </div>
+            <div class="col-lg-6 col-md-12 col-12 mt-5 pt-5">
+                <h1 class="text-dark fs-1 fw-bolder">The Leading Alumni</h1>
+                <h1 class="text-dark fs-1 fw-bolder">Finding Website .</h1>
+                <p class="text-dark fs-5 writep">
+                    GradBond is a platform designed to connect alumni with current students and peers, fostering a strong professional and social network. It enables users to search for alumni by name, graduation year, department, or job title, and facilitates mentoring, career guidance, and event participation. Perfect for building lasting relationships within the community!</p> <br> <br>
+
+                <div class="">
+                    <a href="{% url 'find-alumni' %}"><button type="button" class="service">Find
+                            Alumni</button></a>
+                </div><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid my-1">
+    <div class="container">
+        <div class="row text-center">
+            <h1 class="mt-5 fs-1 fw-bolder resent">Recent Events / Workshops</h1>
+        </div>
+        <div class="row mt-2 d-flex justify-content-center">
+            <div class="row mt-2 d-flex justify-content-center">
+
+                {% for event in events %}
+                <div class="col-lg-6 p-3 col-md-12 col-12 d-flex justify-content-center">
+                    <div class="card border border-dark"
+                        style="width: 35rem; background-color: #3D2462; border-radius: 15px;">
+                        {% if event.image %}
+                        <img src="{{event.image.url}}" class="card-img-top pt-2 ps-2 pe-2" alt="{{event.title}}"
+                            height="300px">
+                        {% else %}
+                        <img src="/media/events/default.png" class="card-img-top pt-2 ps-2 pe-2" alt="{{event.title}}">
+                        {% endif %}
+                        <div class="card-body text-center">
+                            <h5 class="card-title" style="color: aliceblue;"> {{event.title}} </h5>
+                            <p style="color: aliceblue;">{{event.date | date:"F d, Y"}} | {{event.time | time:"h:i A"}}
+                            </p>
+                            <p class="card-title" style="color: aliceblue;">Organized by <strong>
+                                    {{event.user.first_name}}
+                                </strong></p>
+
+                            {% if user.is_authenticated %}
+                            <a href="{{event.regLink}}" class="btn btn-primary me-3" target="_blank">Registration</a>
+                            {% else %}
+                            <a href="{% url 'signin' %}" class="btn btn-primary me-3">Registration</a>
+                            {% endif %}
+
+                            <a href="{% url 'event-detail' event.id %}" class="mt-2 btn btn-success me-3">More
+                                Details</a>
+
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid carosolbg pt-5"><br><br>
+    <div class="container">
+        <div class="list-head text-center">
+            <h1 class="fs-1 fw-bolder">University that are included in GradBond</h1>
+        </div><br><br><br>
+        <div class="university text-center">
+            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner carousel-img">
+                    <div class="carousel-item active ">
+                        <img src="{% static './images/DU.png' %}" class="w-25" alt="...">
+                        <img src="{% static './images/03.png' %}" class="w-25" alt="...">
+                        <img src="{% static './images/NSU.png' %}" class="w-25" alt="...">
+                    </div>
+                    <div class="carousel-item justify-content-center">
+                        <img src="{% static './images/bubt.png' %}" class="w-25" alt="...">
+                        <img src="{% static './images/ju.png' %}" class="w-25" alt="...">
+                        <img src="{% static './images/jnu.png' %}" class="w-25" alt="...">
+                    </div>
+                    <div class="carousel-item justify-content-center">
+                        <img src="{% static './images/sust.png' %}" class="w-25" alt="...">
+                        <img src="{% static './images/pabna.png' %}" class="w-25" alt="...">
+                        <img src="{% static './images/aust.png' %}" class="w-25" alt="...">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                    data-bs-slide="prev">
+                    <img src="{% static './images/left.png' %}" alt="">
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                    data-bs-slide="next">
+                    <img src="{% static './images/rightt.png' %}" alt="">
+                </button>
+            </div>
+        </div>
+        <!-- <div class="noteCard">
+            <div class="row">
+                <div class="col-8">
+                    <div class="cardText">
+                        <h1>Looking for your university alumni?</h1>
+                        <p>We can help you Find Alumni in your curret university</p>
+                    </div>
+                </div>
+                <div class="col-4 btnCard">
+                    <button class="cardButton" onclick="document.location='findAlumni.html'">Find Alumni <span class="arrImg">
+                        <img src="{% static './img/rightArrow.png' %}" alt="">
+                    </span></button>
+                </div>
+            </div>
+        </div> -->
+    </div><br><br><br><br>
+</div>
+
+{% endblock %}
